@@ -10,8 +10,6 @@ rescue Exception
   nil
 end
 
-gem 'soap4r'
-
 require 'wsdl/soap/wsdl2ruby'
 
 logger = Logger.new(STDERR)

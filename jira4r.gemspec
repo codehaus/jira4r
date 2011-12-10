@@ -3,7 +3,7 @@ require 'rubygems'
 spec = Gem::Specification.new do |s|
 
   s.name = 'jira4r'
-  s.version = "0.0.1"
+  s.version = "0.0.2"
   s.platform = Gem::Platform::RUBY
   s.summary = "jira4r is a pure-Ruby JIRA client library"
 # s.requirements << 'Jabber server'

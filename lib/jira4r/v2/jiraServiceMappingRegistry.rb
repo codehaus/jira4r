@@ -1,18 +1,3 @@
-################################################################################
-#  Copyright 2011 Ben Walding
-#
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-################################################################################
 require 'jiraService.rb'
 require 'soap/mapping'
 
@@ -23,7 +8,6 @@ module DefaultMappingRegistry
   LiteralRegistry = ::SOAP::Mapping::LiteralRegistry.new
   NsBeansSoapRpcJiraAtlassianCom = "http://beans.soap.rpc.jira.atlassian.com"
   NsExceptionRpcJiraAtlassianCom = "http://exception.rpc.jira.atlassian.com"
-  NsServiceSoapRpcJiraAtlassianCom = "http://service.soap.rpc.jira.atlassian.com"
 
   EncodedRegistry.register(
     :class => Jira4R::V2::RemoteComment,
@@ -56,7 +40,6 @@ module DefaultMappingRegistry
       ["baseUrl", ["SOAP::SOAPString", XSD::QName.new(nil, "baseUrl")]],
       ["buildDate", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "buildDate")]],
       ["buildNumber", ["SOAP::SOAPString", XSD::QName.new(nil, "buildNumber")]],
-      ["edition", ["SOAP::SOAPString", XSD::QName.new(nil, "edition")]],
       ["serverTime", ["Jira4R::V2::RemoteTimeInfo", XSD::QName.new(nil, "serverTime")]],
       ["version", ["SOAP::SOAPString", XSD::QName.new(nil, "version")]]
     ]
@@ -90,12 +73,19 @@ module DefaultMappingRegistry
   )
 
   EncodedRegistry.register(
-    :class => Jira4R::V2::RemoteComponent,
-    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComponent"),
-    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
+    :class => Jira4R::V2::RemoteConfiguration,
+    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteConfiguration"),
     :schema_element => [
-      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
-      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
+      ["allowAttachments", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowAttachments")]],
+      ["allowExternalUserManagment", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowExternalUserManagment")]],
+      ["allowIssueLinking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowIssueLinking")]],
+      ["allowSubTasks", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowSubTasks")]],
+      ["allowTimeTracking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowTimeTracking")]],
+      ["allowUnassignedIssues", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowUnassignedIssues")]],
+      ["allowVoting", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowVoting")]],
+      ["allowWatching", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowWatching")]],
+      ["timeTrackingDaysPerWeek", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingDaysPerWeek")]],
+      ["timeTrackingHoursPerDay", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingHoursPerDay")]]
     ]
   )
 
@@ -110,6 +100,16 @@ module DefaultMappingRegistry
       ["releaseDate", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "releaseDate")]],
       ["released", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "released")]],
       ["sequence", ["SOAP::SOAPLong", XSD::QName.new(nil, "sequence")]]
+    ]
+  )
+
+  EncodedRegistry.register(
+    :class => Jira4R::V2::RemoteComponent,
+    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComponent"),
+    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
+    :schema_element => [
+      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
+      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
     ]
   )
 
@@ -181,23 +181,6 @@ module DefaultMappingRegistry
       ["description", ["SOAP::SOAPString", XSD::QName.new(nil, "description")]],
       ["icon", ["SOAP::SOAPString", XSD::QName.new(nil, "icon")]],
       ["subTask", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "subTask")]]
-    ]
-  )
-
-  EncodedRegistry.register(
-    :class => Jira4R::V2::RemoteConfiguration,
-    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteConfiguration"),
-    :schema_element => [
-      ["allowAttachments", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowAttachments")]],
-      ["allowExternalUserManagment", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowExternalUserManagment")]],
-      ["allowIssueLinking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowIssueLinking")]],
-      ["allowSubTasks", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowSubTasks")]],
-      ["allowTimeTracking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowTimeTracking")]],
-      ["allowUnassignedIssues", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowUnassignedIssues")]],
-      ["allowVoting", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowVoting")]],
-      ["allowWatching", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowWatching")]],
-      ["timeTrackingDaysPerWeek", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingDaysPerWeek")]],
-      ["timeTrackingHoursPerDay", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingHoursPerDay")]]
     ]
   )
 
@@ -343,16 +326,6 @@ module DefaultMappingRegistry
   )
 
   EncodedRegistry.register(
-    :class => Jira4R::V2::RemoteField,
-    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteField"),
-    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
-    :schema_element => [
-      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
-      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
-    ]
-  )
-
-  EncodedRegistry.register(
     :class => Jira4R::V2::RemoteFilter,
     :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteFilter"),
     :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
@@ -363,6 +336,16 @@ module DefaultMappingRegistry
       ["description", ["SOAP::SOAPString", XSD::QName.new(nil, "description")]],
       ["project", ["SOAP::SOAPString", XSD::QName.new(nil, "project")]],
       ["xml", ["SOAP::SOAPString", XSD::QName.new(nil, "xml")]]
+    ]
+  )
+
+  EncodedRegistry.register(
+    :class => Jira4R::V2::RemoteField,
+    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteField"),
+    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
+    :schema_element => [
+      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
+      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
     ]
   )
 
@@ -436,15 +419,15 @@ module DefaultMappingRegistry
   )
 
   EncodedRegistry.register(
-    :class => Jira4R::V2::RemoteValidationException,
-    :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteValidationException"),
+    :class => Jira4R::V2::RemoteAuthenticationException,
+    :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteAuthenticationException"),
     :schema_basetype => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteException"),
     :schema_element => []
   )
 
   EncodedRegistry.register(
-    :class => Jira4R::V2::RemoteAuthenticationException,
-    :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteAuthenticationException"),
+    :class => Jira4R::V2::RemoteValidationException,
+    :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteValidationException"),
     :schema_basetype => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteException"),
     :schema_element => []
   )
@@ -454,13 +437,6 @@ module DefaultMappingRegistry
     ::SOAP::SOAPArray,
     ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
     { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteUser") }
-  )
-
-  EncodedRegistry.set(
-    Jira4R::V2::ArrayOf_tns1_RemoteComponent,
-    ::SOAP::SOAPArray,
-    ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
-    { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComponent") }
   )
 
   EncodedRegistry.set(
@@ -475,6 +451,13 @@ module DefaultMappingRegistry
     ::SOAP::SOAPArray,
     ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
     { :type => XSD::QName.new("http://www.w3.org/2001/XMLSchema", "string") }
+  )
+
+  EncodedRegistry.set(
+    Jira4R::V2::ArrayOf_tns1_RemoteComponent,
+    ::SOAP::SOAPArray,
+    ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
+    { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComponent") }
   )
 
   EncodedRegistry.set(
@@ -562,13 +545,6 @@ module DefaultMappingRegistry
   )
 
   EncodedRegistry.set(
-    Jira4R::V2::ArrayOf_tns1_RemoteField,
-    ::SOAP::SOAPArray,
-    ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
-    { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteField") }
-  )
-
-  EncodedRegistry.set(
     Jira4R::V2::ArrayOf_tns1_RemoteComment,
     ::SOAP::SOAPArray,
     ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
@@ -580,6 +556,13 @@ module DefaultMappingRegistry
     ::SOAP::SOAPArray,
     ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
     { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteFilter") }
+  )
+
+  EncodedRegistry.set(
+    Jira4R::V2::ArrayOf_tns1_RemoteField,
+    ::SOAP::SOAPArray,
+    ::SOAP::Mapping::EncodedRegistry::TypedArrayFactory,
+    { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteField") }
   )
 
   EncodedRegistry.set(
@@ -645,25 +628,6 @@ module DefaultMappingRegistry
     { :type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteProject") }
   )
 
-  EncodedRegistry.register(
-    :class => Jira4R::V2::RemoteWorklogImpl,
-    :schema_type => XSD::QName.new(NsServiceSoapRpcJiraAtlassianCom, "RemoteWorklogImpl"),
-    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteWorklog"),
-    :schema_element => [
-      ["author", ["SOAP::SOAPString", XSD::QName.new(nil, "author")]],
-      ["comment", ["SOAP::SOAPString", XSD::QName.new(nil, "comment")]],
-      ["created", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "created")]],
-      ["groupLevel", ["SOAP::SOAPString", XSD::QName.new(nil, "groupLevel")]],
-      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
-      ["roleLevelId", ["SOAP::SOAPString", XSD::QName.new(nil, "roleLevelId")]],
-      ["startDate", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "startDate")]],
-      ["timeSpent", ["SOAP::SOAPString", XSD::QName.new(nil, "timeSpent")]],
-      ["timeSpentInSeconds", ["SOAP::SOAPLong", XSD::QName.new(nil, "timeSpentInSeconds")]],
-      ["updateAuthor", ["SOAP::SOAPString", XSD::QName.new(nil, "updateAuthor")]],
-      ["updated", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "updated")]]
-    ]
-  )
-
   LiteralRegistry.register(
     :class => Jira4R::V2::RemoteComment,
     :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComment"),
@@ -695,7 +659,6 @@ module DefaultMappingRegistry
       ["baseUrl", ["SOAP::SOAPString", XSD::QName.new(nil, "baseUrl")]],
       ["buildDate", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "buildDate")]],
       ["buildNumber", ["SOAP::SOAPString", XSD::QName.new(nil, "buildNumber")]],
-      ["edition", ["SOAP::SOAPString", XSD::QName.new(nil, "edition")]],
       ["serverTime", ["Jira4R::V2::RemoteTimeInfo", XSD::QName.new(nil, "serverTime")]],
       ["version", ["SOAP::SOAPString", XSD::QName.new(nil, "version")]]
     ]
@@ -729,12 +692,19 @@ module DefaultMappingRegistry
   )
 
   LiteralRegistry.register(
-    :class => Jira4R::V2::RemoteComponent,
-    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComponent"),
-    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
+    :class => Jira4R::V2::RemoteConfiguration,
+    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteConfiguration"),
     :schema_element => [
-      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
-      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
+      ["allowAttachments", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowAttachments")]],
+      ["allowExternalUserManagment", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowExternalUserManagment")]],
+      ["allowIssueLinking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowIssueLinking")]],
+      ["allowSubTasks", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowSubTasks")]],
+      ["allowTimeTracking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowTimeTracking")]],
+      ["allowUnassignedIssues", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowUnassignedIssues")]],
+      ["allowVoting", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowVoting")]],
+      ["allowWatching", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowWatching")]],
+      ["timeTrackingDaysPerWeek", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingDaysPerWeek")]],
+      ["timeTrackingHoursPerDay", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingHoursPerDay")]]
     ]
   )
 
@@ -749,6 +719,16 @@ module DefaultMappingRegistry
       ["releaseDate", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "releaseDate")]],
       ["released", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "released")]],
       ["sequence", ["SOAP::SOAPLong", XSD::QName.new(nil, "sequence")]]
+    ]
+  )
+
+  LiteralRegistry.register(
+    :class => Jira4R::V2::RemoteComponent,
+    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteComponent"),
+    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
+    :schema_element => [
+      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
+      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
     ]
   )
 
@@ -820,23 +800,6 @@ module DefaultMappingRegistry
       ["description", ["SOAP::SOAPString", XSD::QName.new(nil, "description")]],
       ["icon", ["SOAP::SOAPString", XSD::QName.new(nil, "icon")]],
       ["subTask", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "subTask")]]
-    ]
-  )
-
-  LiteralRegistry.register(
-    :class => Jira4R::V2::RemoteConfiguration,
-    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteConfiguration"),
-    :schema_element => [
-      ["allowAttachments", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowAttachments")]],
-      ["allowExternalUserManagment", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowExternalUserManagment")]],
-      ["allowIssueLinking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowIssueLinking")]],
-      ["allowSubTasks", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowSubTasks")]],
-      ["allowTimeTracking", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowTimeTracking")]],
-      ["allowUnassignedIssues", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowUnassignedIssues")]],
-      ["allowVoting", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowVoting")]],
-      ["allowWatching", ["SOAP::SOAPBoolean", XSD::QName.new(nil, "allowWatching")]],
-      ["timeTrackingDaysPerWeek", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingDaysPerWeek")]],
-      ["timeTrackingHoursPerDay", ["SOAP::SOAPInt", XSD::QName.new(nil, "timeTrackingHoursPerDay")]]
     ]
   )
 
@@ -982,16 +945,6 @@ module DefaultMappingRegistry
   )
 
   LiteralRegistry.register(
-    :class => Jira4R::V2::RemoteField,
-    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteField"),
-    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
-    :schema_element => [
-      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
-      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
-    ]
-  )
-
-  LiteralRegistry.register(
     :class => Jira4R::V2::RemoteFilter,
     :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteFilter"),
     :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
@@ -1002,6 +955,16 @@ module DefaultMappingRegistry
       ["description", ["SOAP::SOAPString", XSD::QName.new(nil, "description")]],
       ["project", ["SOAP::SOAPString", XSD::QName.new(nil, "project")]],
       ["xml", ["SOAP::SOAPString", XSD::QName.new(nil, "xml")]]
+    ]
+  )
+
+  LiteralRegistry.register(
+    :class => Jira4R::V2::RemoteField,
+    :schema_type => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteField"),
+    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "AbstractNamedRemoteEntity"),
+    :schema_element => [
+      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
+      ["name", ["SOAP::SOAPString", XSD::QName.new(nil, "name")]]
     ]
   )
 
@@ -1075,13 +1038,6 @@ module DefaultMappingRegistry
   )
 
   LiteralRegistry.register(
-    :class => Jira4R::V2::RemoteValidationException,
-    :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteValidationException"),
-    :schema_basetype => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteException"),
-    :schema_element => []
-  )
-
-  LiteralRegistry.register(
     :class => Jira4R::V2::RemoteAuthenticationException,
     :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteAuthenticationException"),
     :schema_basetype => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteException"),
@@ -1089,23 +1045,12 @@ module DefaultMappingRegistry
   )
 
   LiteralRegistry.register(
-    :class => Jira4R::V2::RemoteWorklogImpl,
-    :schema_type => XSD::QName.new(NsServiceSoapRpcJiraAtlassianCom, "RemoteWorklogImpl"),
-    :schema_basetype => XSD::QName.new(NsBeansSoapRpcJiraAtlassianCom, "RemoteWorklog"),
-    :schema_element => [
-      ["author", ["SOAP::SOAPString", XSD::QName.new(nil, "author")]],
-      ["comment", ["SOAP::SOAPString", XSD::QName.new(nil, "comment")]],
-      ["created", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "created")]],
-      ["groupLevel", ["SOAP::SOAPString", XSD::QName.new(nil, "groupLevel")]],
-      ["id", ["SOAP::SOAPString", XSD::QName.new(nil, "id")]],
-      ["roleLevelId", ["SOAP::SOAPString", XSD::QName.new(nil, "roleLevelId")]],
-      ["startDate", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "startDate")]],
-      ["timeSpent", ["SOAP::SOAPString", XSD::QName.new(nil, "timeSpent")]],
-      ["timeSpentInSeconds", ["SOAP::SOAPLong", XSD::QName.new(nil, "timeSpentInSeconds")]],
-      ["updateAuthor", ["SOAP::SOAPString", XSD::QName.new(nil, "updateAuthor")]],
-      ["updated", ["SOAP::SOAPDateTime", XSD::QName.new(nil, "updated")]]
-    ]
+    :class => Jira4R::V2::RemoteValidationException,
+    :schema_type => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteValidationException"),
+    :schema_basetype => XSD::QName.new(NsExceptionRpcJiraAtlassianCom, "RemoteException"),
+    :schema_element => []
   )
+
 end
 
 end; end

@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    soap4r-ruby1.9 (2.0.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  soap4r-ruby1.9
